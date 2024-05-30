@@ -1,0 +1,28 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 18.11.2011 16:49:44
+
+newmtl pendant_key_silver
+	Ns 45.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.6000 0.4745 0.2510
+	Kd 0.6000 0.4745 0.2510
+	Ks 0.5715 0.5391 0.4975
+	Ke 0.0000 0.0000 0.0000
+	map_bump -bm 0.0300 pendant_key_bump.jpg
+	bump -bm 0.0300 pendant_key_bump.jpg
+
+newmtl pendant_chain_silver
+	Ns 50.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.6824 0.6824 0.6824
+	Kd 0.6824 0.6824 0.6824
+	Ks 0.5812 0.5482 0.5059
+	Ke 0.0000 0.0000 0.0000
