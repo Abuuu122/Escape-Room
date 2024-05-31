@@ -48,7 +48,16 @@ EditorBuildSettings:
     path: Assets/StarterSamples/Usage/SceneManager.unity
     guid: d9d629a01189e9744a9347a18243afd9
   - enabled: 1
-    path: Assets/Scenes/DistanceGrab.unity
+    path: Assets/Scenes/StartScene.unity
+    guid: 88f13d49fdb2cf54582e68c39c96c9d5
+  - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: 614a4a0f40cca7a4cb4b5b3e06b80530
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: 632fd725da9d2ba408bccb00f9a4147e
+  - enabled: 1
+    path: Assets/Scenes/Level3.unity
     guid: c511aee1e06c5ae48a22dc381decf2c7
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 8c0030b4b5984e7439a553df0cdd7dd2,

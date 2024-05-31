@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;  
 
 public class SimpleCapsuleWithStickMovement : MonoBehaviour
 {
@@ -73,7 +74,11 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         Vector3 prevPos = root.position;
         Quaternion prevRot = root.rotation;
 
-        transform.rotation = Quaternion.Euler(0.0f, centerEye.rotation.eulerAngles.y, 0.0f);
+        Quaternion targetRotation = Quaternion.Euler(0.0f, centerEye.rotation.eulerAngles.y, 0.0f);
+        float rotationSpeed = 2.0f; // Adjust the rotation speed as needed
+
+        // Slowly rotate towards the target rotation
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
         root.position = prevPos;
         root.rotation = prevRot;
@@ -92,6 +97,8 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         moveDir += ort * (primaryAxis.y * Vector3.forward);
         //_rigidbody.MovePosition(_rigidbody.transform.position + moveDir * Speed * Time.fixedDeltaTime);
         _rigidbody.MovePosition(_rigidbody.position + moveDir * Speed * Time.fixedDeltaTime);
+
+        //AudioManager.instance.WalkAudio(); // Add this line to play the walking audio
     }
 
     void SnapTurn()
@@ -120,10 +127,27 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         }
     }
 
+    private IEnumerator SlowRotateAround(Vector3 center, Vector3 axis, float angle, float duration)
+    {
+        float elapsedTime = 0f;
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.AngleAxis(angle, axis) * startRotation;
+
+        while (elapsedTime < duration)
+        {
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = targetRotation;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Keys")
         {
+            AudioManager.instance.GetAudio();
             haveKey = true;
             Destroy(other.gameObject);
         }
@@ -135,20 +159,33 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         {
             if (haveKey)
             {
+                AudioManager.instance.WinAudio();
                 WinCanvas.gameObject.SetActive(true);
+
+                // 在碰撞发生后的适当位置添加以下代码
+                StartCoroutine(LoadSceneAfterDelay(4f, "StartScene"));
                 Destroy(collision.gameObject);
             }
             else
             {
+                AudioManager.instance.DeniedAudio();
                 NoKeyCanvas.gameObject.SetActive(true);
                 StartCoroutine(HideCanvasAfterDelay(2f, NoKeyCanvas));
             }
         }
     }
 
+    //定时显示canvas
     private IEnumerator HideCanvasAfterDelay(float delay, Canvas canvas)
     {
         yield return new WaitForSeconds(delay);
         canvas.gameObject.SetActive(false);
+    }
+
+    // 在类中添加以下协程方法
+    private IEnumerator LoadSceneAfterDelay(float delay, string sceneName)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(sceneName);
     }
 }
