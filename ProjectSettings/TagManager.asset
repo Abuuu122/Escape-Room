@@ -8,6 +8,9 @@ TagManager:
   - CompletedTag
   - Keys
   - Doors
+  - Enemies
+  - Swords
+  - Penetrable
   layers:
   - Default
   - TransparentFX
@@ -39,7 +42,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - XR Simulation
   - 
   m_SortingLayers:
   - name: Default

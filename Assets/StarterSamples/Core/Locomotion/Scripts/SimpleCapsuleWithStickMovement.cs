@@ -42,9 +42,16 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
     public event Action PreCharacterMove;
 
     public bool haveKey = false;
+    public int enemyCount = 0;
 
     public Canvas WinCanvas;
     public Canvas NoKeyCanvas;
+    public Canvas GameOverCanvas;
+
+    //游戏总时间
+    public float gameTime = 0;
+
+    public bool win = false;
 
     private void Awake()
     {
@@ -64,7 +71,32 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         if (HMDRotatesPlayer) RotatePlayerToHMD();
         if (EnableLinearMovement) StickMovement();
         if (EnableRotation) SnapTurn();
+
+        SwitchBGM();
+
+        //游戏总时间
+        if (!win)
+        {
+            gameTime += Time.fixedDeltaTime;
+            WinCanvas.GetComponentInChildren<TextMeshProUGUI>().text = "Congratulations!\n    Time: " + gameTime.ToString("F2") + "s";
+        }
+        
     }
+
+    void SwitchBGM()
+    {
+        if (enemyCount == 0 && BGMManager.instance.isAttack)
+        {
+            BGMManager.instance.isAttack = false;
+            BGMManager.instance.NormalBGM();
+        }
+        else if(enemyCount > 0 && !BGMManager.instance.isAttack)
+        {
+            BGMManager.instance.isAttack = true;
+            BGMManager.instance.AttackBGM();
+        }
+    }
+
 
     void RotatePlayerToHMD()
     {
@@ -98,7 +130,7 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         //_rigidbody.MovePosition(_rigidbody.transform.position + moveDir * Speed * Time.fixedDeltaTime);
         _rigidbody.MovePosition(_rigidbody.position + moveDir * Speed * Time.fixedDeltaTime);
 
-        //AudioManager.instance.WalkAudio(); // Add this line to play the walking audio
+        //EEFManager.instance.WalkAudio(); // Add this line to play the walking audio
     }
 
     void SnapTurn()
@@ -147,7 +179,7 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
     {
         if (other.gameObject.tag == "Keys")
         {
-            AudioManager.instance.GetAudio();
+            EEFManager.instance.GetAudio();
             haveKey = true;
             Destroy(other.gameObject);
         }
@@ -159,19 +191,35 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         {
             if (haveKey)
             {
-                AudioManager.instance.WinAudio();
+                BGMManager.instance.NormalBGM();
+                EEFManager.instance.WinAudio();
+                win = true;
                 WinCanvas.gameObject.SetActive(true);
 
                 // 在碰撞发生后的适当位置添加以下代码
+                // 获取当前场景的序号
+                //int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+                // 加载下一个场景
+                //StartCoroutine(LoadSceneAfterDelay(4f, currentSceneIndex + 1));
+
+                //返回开始场景
                 StartCoroutine(LoadSceneAfterDelay(4f, "StartScene"));
                 Destroy(collision.gameObject);
             }
             else
             {
-                AudioManager.instance.DeniedAudio();
+                EEFManager.instance.DeniedAudio();
                 NoKeyCanvas.gameObject.SetActive(true);
                 StartCoroutine(HideCanvasAfterDelay(2f, NoKeyCanvas));
             }
+        }
+        else if(collision.gameObject.tag == "Enemies" && collision.gameObject.GetComponent<Animator>().GetBool("Attack"))
+        {
+            EEFManager.instance.GameOverAudio();
+            GameOverCanvas.gameObject.SetActive(true);
+            StartCoroutine(LoadSceneAfterDelay(4f, "StartScene"));
+            Speed = 0;
         }
     }
 
@@ -184,6 +232,12 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
 
     // 在类中添加以下协程方法
     private IEnumerator LoadSceneAfterDelay(float delay, string sceneName)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(sceneName);
+    }
+
+    private IEnumerator LoadSceneAfterDelay(float delay, int sceneName)
     {
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(sceneName);

@@ -18,9 +18,6 @@ EditorBuildSettings:
     path: Assets/StarterSamples/Usage/DebugUI.unity
     guid: 34004346bd7dcbf4fbfd78d2f12e4451
   - enabled: 0
-    path: Assets/StarterSamples/Usage/DistanceGrab.unity
-    guid: 24f58b3f0ca02d44eaec7f50bca538f2
-  - enabled: 0
     path: Assets/StarterSamples/Usage/Locomotion.unity
     guid: 024cd9dcd49bd8f46a6bea03aa8a21bb
   - enabled: 0
@@ -59,8 +56,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level3.unity
     guid: c511aee1e06c5ae48a22dc381decf2c7
+  - enabled: 0
+    path: Assets/StarterSamples/Usage/DistanceGrab.unity
+    guid: 24f58b3f0ca02d44eaec7f50bca538f2
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 8c0030b4b5984e7439a553df0cdd7dd2,
       type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: ddebaa618ba8a68429c2ab08d68c2caa,
+      type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: abe5d4c6390c70b438750d3c82121457,
+      type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: e8316b5beaf365c4497da44f5dc3e26c,
+      type: 2}
+    xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 6dc1de980c46cae45afa28fad5a52dac,
       type: 2}
