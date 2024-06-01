@@ -23,7 +23,11 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;  
+using UnityEngine.SceneManagement;
+using UnityEngine.Experimental.GlobalIllumination;
+
+using System.Runtime.Serialization.Formatters.Binary;//必须要导入的包
+using System.IO;//必须要导入的包
 
 public class SimpleCapsuleWithStickMovement : MonoBehaviour
 {
@@ -47,11 +51,15 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
     public Canvas WinCanvas;
     public Canvas NoKeyCanvas;
     public Canvas GameOverCanvas;
+    public Canvas MenuCanvas;
+
+    public GameObject spotlight;
 
     //游戏总时间
     public float gameTime = 0;
 
     public bool win = false;
+
 
     private void Awake()
     {
@@ -72,6 +80,13 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         if (EnableLinearMovement) StickMovement();
         if (EnableRotation) SnapTurn();
 
+        if (spotlight != null)
+        {
+            spotlight.transform.position = transform.position;
+            spotlight.transform.rotation = transform.rotation;
+        }
+
+
         SwitchBGM();
 
         //游戏总时间
@@ -80,7 +95,34 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
             gameTime += Time.fixedDeltaTime;
             WinCanvas.GetComponentInChildren<TextMeshProUGUI>().text = "Congratulations!\n    Time: " + gameTime.ToString("F2") + "s";
         }
-        
+    }
+
+    private float updateDelay = 0.1f; // Delay in seconds
+
+    private float updateTimer = 0.0f;
+
+    //每一秒执行一次的函数
+    private void Update()
+    {
+        updateTimer += Time.deltaTime;
+        if (updateTimer >= updateDelay)
+        {
+            updateTimer = 0.0f;
+            //获取OVR按键
+            if (OVRInput.Get(OVRInput.Button.Start))
+            {
+                //按两次退出游戏,第一次显示菜单,第二次退出游戏
+                if (MenuCanvas.gameObject.activeSelf)
+                {
+                    SceneManager.LoadScene("StartScene");
+                }
+                else
+                {
+                    MenuCanvas.gameObject.SetActive(true);
+                    //防止重复按键
+                }
+            }
+        }
     }
 
     void SwitchBGM()
@@ -90,7 +132,7 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
             BGMManager.instance.isAttack = false;
             BGMManager.instance.NormalBGM();
         }
-        else if(enemyCount > 0 && !BGMManager.instance.isAttack)
+        else if (enemyCount > 0 && !BGMManager.instance.isAttack)
         {
             BGMManager.instance.isAttack = true;
             BGMManager.instance.AttackBGM();
@@ -107,10 +149,12 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         Quaternion prevRot = root.rotation;
 
         Quaternion targetRotation = Quaternion.Euler(0.0f, centerEye.rotation.eulerAngles.y, 0.0f);
-        float rotationSpeed = 2.0f; // Adjust the rotation speed as needed
+        //float rotationSpeed = 2.0f; // Adjust the rotation speed as needed
 
         // Slowly rotate towards the target rotation
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+        transform.rotation = targetRotation;
 
         root.position = prevPos;
         root.rotation = prevRot;
@@ -129,8 +173,6 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         moveDir += ort * (primaryAxis.y * Vector3.forward);
         //_rigidbody.MovePosition(_rigidbody.transform.position + moveDir * Speed * Time.fixedDeltaTime);
         _rigidbody.MovePosition(_rigidbody.position + moveDir * Speed * Time.fixedDeltaTime);
-
-        //EEFManager.instance.WalkAudio(); // Add this line to play the walking audio
     }
 
     void SnapTurn()
@@ -183,6 +225,16 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
             haveKey = true;
             Destroy(other.gameObject);
         }
+
+        if (other.gameObject.tag == "Portions")
+        {
+            if (Speed < 10)
+            {
+                EEFManager.instance.GetAudio();
+                Speed += 2;
+                Destroy(other.gameObject);
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -193,8 +245,14 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
             {
                 BGMManager.instance.NormalBGM();
                 EEFManager.instance.WinAudio();
+
+                Destroy(collision.gameObject);
+
                 win = true;
                 WinCanvas.gameObject.SetActive(true);
+
+
+                //string currentSceneName = SceneManager.GetActiveScene().name;
 
                 // 在碰撞发生后的适当位置添加以下代码
                 // 获取当前场景的序号
@@ -205,7 +263,6 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
 
                 //返回开始场景
                 StartCoroutine(LoadSceneAfterDelay(4f, "StartScene"));
-                Destroy(collision.gameObject);
             }
             else
             {
@@ -214,7 +271,7 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
                 StartCoroutine(HideCanvasAfterDelay(2f, NoKeyCanvas));
             }
         }
-        else if(collision.gameObject.tag == "Enemies" && collision.gameObject.GetComponent<Animator>().GetBool("Attack"))
+        else if (collision.gameObject.tag == "Enemies" && collision.gameObject.GetComponent<Animator>().GetBool("Attack"))
         {
             EEFManager.instance.GameOverAudio();
             GameOverCanvas.gameObject.SetActive(true);
@@ -242,4 +299,5 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(sceneName);
     }
+
 }

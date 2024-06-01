@@ -11,6 +11,8 @@ TagManager:
   - Enemies
   - Swords
   - Penetrable
+  - Wall
+  - Portions
   layers:
   - Default
   - TransparentFX

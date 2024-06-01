@@ -51,4 +51,10 @@ public class EEFManager : MonoBehaviour
         audioSource.clip = audioClips[5];
         audioSource.Play();
     }
+
+    public void BrokenAudio()
+    {
+        audioSource.clip = audioClips[6];
+        audioSource.Play();
+    }
 }

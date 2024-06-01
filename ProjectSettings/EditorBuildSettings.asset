@@ -48,13 +48,13 @@ EditorBuildSettings:
     path: Assets/Scenes/StartScene.unity
     guid: 88f13d49fdb2cf54582e68c39c96c9d5
   - enabled: 1
-    path: Assets/Scenes/Level1.unity
+    path: Assets/Scenes/Easy.unity
     guid: 614a4a0f40cca7a4cb4b5b3e06b80530
   - enabled: 1
-    path: Assets/Scenes/Level2.unity
+    path: Assets/Scenes/Normal.unity
     guid: 632fd725da9d2ba408bccb00f9a4147e
   - enabled: 1
-    path: Assets/Scenes/Level3.unity
+    path: Assets/Scenes/Hard.unity
     guid: c511aee1e06c5ae48a22dc381decf2c7
   - enabled: 0
     path: Assets/StarterSamples/Usage/DistanceGrab.unity

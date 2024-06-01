@@ -1,51 +1,28 @@
-![Starter Samples Banner](./Documentation/Medias/banner.png "StarterSamples")
+# 迷宫VR游戏
 
-# Unity Starter Samples
-The starter samples you will find here are to help you navigate and understand our APIs with more flexibility. We encourage you to look into them, test them out and inspire yourself on how the APIs can be used in your own project.
+## 开发环境
 
-The [Oculus License](./LICENSE) applies to the samples.
+Unity 2022.3.12f1c1
 
-This project was built using the [Unity engine](https://unity.com/download).
+## 测试设备
 
-## Getting The Code
-Clone this repo using the "Code" button above, or this command:
-```sh
-git clone https://github.com/oculus-samples/Unity-StarterSamples.git
-```
+Oculus Quest2 VR一体机
 
-## How to run the project in Unity
-1. Make sure you're using  *Unity 2021.3.26f1* or newer.
-2. In the Project window, navigate to [Assets/StarterSamples/Usage](Assets/StarterSamples/Usage).
-3. Click on individual scenes.
-4. Click **Play** button to explore scene functionality in Unity.
+## 玩法介绍
 
-## How to test on device
-1. Navigate to **Oculus** > **Samples** > **Build Starter Scene** to build an APK that will launch the **Starter Scene**.
-    <div style="margin-left: 4.5em;"><img src="./Documentation/Medias/buildsamples.png" width="300"></div>
-    * In this apk you will be able to cycle through the different sample scenes to test them out on device.
-2. Navigate to the `Unity-StarterSamples` folder and copy the `StartScene.apk` to your device using [Meta Quest Developer Hub](https://developer.oculus.com/documentation/unity/ts-odh-deploy-build/).
+1. 核心玩法：找到***钥匙***，然后找***出口***逃离迷宫。
 
-## SDK Dependencies
-All Meta SDKs can be found in the [Unity Asset Store](https://assetstore.unity.com/publishers/25353).
-This project depends on SDKs defined in the [Packages/manifest.json](./Packages/manifest.json):
-* [Meta XR Core SDK](https://assetstore.unity.com/packages/tools/integration/meta-xr-core-sdk-269169)
-* [Meta XR Platform SDK](https://assetstore.unity.com/packages/tools/integration/meta-xr-platform-sdk-262366)
+2. 迷宫中有***怪物***，踏入怪物感知范围后进入***警戒状态***，BGM更改可以提示，进一步靠近怪物会使之进入***追击状态***，向玩家冲过来，靠近玩家时进入***攻击状态***，发动攻击，玩家受到攻击就游戏失败。
+3. 在迷宫中能够拾取到***宝剑***，可以用来砍怪物，有***攻击力***和***血量***设定，怪物的血条清空后死亡。
+4. 宝剑有***耐久度***，发动攻击次数过多后会***损毁***，需要注意使用次数。
+5. 在迷宫中能够找到具有***移动速度加成***的***药水***，能够更好地甩开怪物追击。
+6. 游戏分为***Easy***，***Normal***，***Hard***三个难度，逐渐增大迷宫地形复杂程度，怪物在***Hard***模式下可以***穿墙***。
+7. 游戏有***时间记录***，在更短的时间逃离迷宫吧。
 
-## Integrate Samples to your own project
-1. Make sure your project uses the same SDK version
-2. Move the samples to your project
-   <details>
-      <summary><b>Copy Samples directory</b></summary>
+## 关卡地图
 
-      + Copy [Assets/StarterSamples](./Assets/StarterSamples) directory to your own project
-    </details>
-    <details>
-      <summary><b>Create UnityPackage and Import it</b></summary>
+![Terrain](Terrain.jpg)
 
-      1. Open Unity-StarterSamples project in Unity
-      2. Right-click on [Assets/StarterSamples](./Assets/StarterSamples) and select <i>Export Package...</i>
-      3. Save package in an easy location to retrieve
-      4. Open your own project (where you want the samples to be added)
-      5. Click on <i>Assets->Import Package->Custom Package...</i> from the menu bar
-      6. Find the package we saved in step 3 and click <i>Open</i>
-    </details>
+## 游戏截图
+
+![prtsc](prtsc.jpg)

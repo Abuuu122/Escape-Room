@@ -455,4 +455,18 @@ public class DebugUIBuilder : MonoBehaviour
             }
         }
     }
+
+    public void Clear()
+    {
+        // Clear all elements from all panels
+        for (int i = 0; i < insertedElements.Length; ++i)
+        {
+            foreach (RectTransform r in insertedElements[i])
+            {
+                Destroy(r.gameObject);
+            }
+
+            insertedElements[i].Clear();
+        }
+    }
 }

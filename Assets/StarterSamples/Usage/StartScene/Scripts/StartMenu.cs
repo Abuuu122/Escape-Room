@@ -23,6 +23,8 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
 
 // Create menu of all scenes included in the build.
 public class StartMenu : MonoBehaviour
@@ -33,10 +35,10 @@ public class StartMenu : MonoBehaviour
 
     void Start()
     {
-        DebugUIBuilder.instance.AddLabel("Select Levels");
+        DebugUIBuilder.instance.AddLabel("Maze VR");
 
         int n = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
-        for (int i = 0; i < n; ++i)
+        for (int i = 1; i < n; ++i)
         {
             string path = UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i);
             var sceneIndex = i;

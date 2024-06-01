@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class Enemy : MonoBehaviour
     public bool battle = false;
     public GameObject player;
     public bool isDead = false;
+    public Slider slider;
 
     // Start is called before the first frame update
     void Start()
@@ -93,10 +95,20 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.tag == "Swords")
         {
-            health -= 50f;
+            health -= 30f;
+            slider.value = health / 100f;
             //»÷ÍËÐ§¹û
-            rb.AddForce(-transform.forward * 5000f);
+            rb.velocity = Vector3.zero;
+            rb.AddForce(-transform.forward * 500f);
             EEFManager.instance.AttackAudio();
+
+            //player±»»÷ÍË
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            player.GetComponent<Rigidbody>().AddForce(transform.forward * 500f);
+
+            //¼õÉÙÎäÆ÷ÄÍ¾Ã¶È
+            other.gameObject.GetComponent<durability>().durabilityValue--;
+
             if (health <= 0)
             {
                 battle = false;
