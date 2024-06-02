@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     public float initialScale = 0.8f;
     public float scaleIncreaseRate = 0.005f;
 
-    private float threshold1 = 1.1f;
+    private float threshold1 = 1f;
     private float threshold2 = 8f;
     private float threshold3 = 14f;
 
