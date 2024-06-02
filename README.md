@@ -1,4 +1,4 @@
-# 迷宫VR游戏
+# Maze Escape
 
 ## 开发环境
 
