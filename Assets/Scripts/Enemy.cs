@@ -16,11 +16,12 @@ public class Enemy : MonoBehaviour
     public bool isDead = false;
     public Slider slider;
     public float damageSum = 0f;
+    public float ATK = 500f;
 
     public float initialScale = 0.8f;
     public float scaleIncreaseRate = 0.005f;
 
-    private float threshold1 = 1.2f;
+    private float threshold1 = 1.1f;
     private float threshold2 = 8f;
     private float threshold3 = 14f;
 
@@ -103,8 +104,11 @@ public class Enemy : MonoBehaviour
         //slider
         slider.value = health / maxHealth;
 
+        //ATK increase with size
+        ATK = 500f * currentScale;
+
         //threshold increase with size
-        threshold1 = 1.2f * currentScale;
+        threshold1 = 1.1f * currentScale;
         threshold2 = 8f * currentScale;
         threshold3 = 14f * currentScale;
 

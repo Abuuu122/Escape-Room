@@ -704,6 +704,7 @@ MonoBehaviour:
   isDead: 0
   slider: {fileID: 3595437489765992350}
   damageSum: 0
+  ATK: 500
   initialScale: 0.8
   scaleIncreaseRate: 0.005
 --- !u!1 &2452409939207722928

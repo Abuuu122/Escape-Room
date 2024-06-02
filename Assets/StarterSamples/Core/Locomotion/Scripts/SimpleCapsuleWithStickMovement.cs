@@ -27,7 +27,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Experimental.GlobalIllumination;
 
 using System.Runtime.Serialization.Formatters.Binary;//必须要导入的包
-using System.IO;//必须要导入的包
+using System.IO;
+using UnityEngine.UI;//必须要导入的包
 
 public class SimpleCapsuleWithStickMovement : MonoBehaviour
 {
@@ -48,11 +49,15 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
     public bool haveKey = false;
     public int enemyCount = 0;
 
+    public float maxHealth = 1000f;
+    public float currentHealth = 1000f;
+
     public Canvas WinCanvas;
     public Canvas NoKeyCanvas;
     public Canvas GameOverCanvas;
     public Canvas MenuCanvas;
     public Canvas BeginCanvas;
+    public Canvas HealthCanvas;
 
     public GameObject spotlight;
 
@@ -60,6 +65,8 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
     public float gameTime = 0;
 
     public bool win = false;
+
+    //private Vector3 OriginalHealthScale;
 
 
     private void Awake()
@@ -71,6 +78,8 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
     void Start()
     {
         StartCoroutine(HideCanvasAfterDelay(4f, BeginCanvas));
+
+        //OriginalHealthScale = HealthCanvas.GetComponentInChildren<Slider>().transform.localScale;
     }
 
     private void FixedUpdate()
@@ -88,7 +97,6 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
             spotlight.transform.rotation = transform.rotation;
         }
 
-
         SwitchBGM();
 
         //游戏总时间
@@ -97,6 +105,13 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
             gameTime += Time.fixedDeltaTime;
             WinCanvas.GetComponentInChildren<TextMeshProUGUI>().text = "Congratulations!\n    Time: " + gameTime.ToString("F2") + "s";
         }
+
+        //血条显示
+        HealthCanvas.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "HP: " + currentHealth.ToString("F0") + "/" + maxHealth.ToString("F0");
+        HealthCanvas.GetComponentInChildren<Slider>().value = currentHealth / maxHealth;
+
+        //血条总长度随maxHealth变化
+        //HealthCanvas.GetComponentInChildren<Slider>().transform.localScale = new Vector3(maxHealth / 1000f * OriginalHealthScale.x, OriginalHealthScale.y, OriginalHealthScale.z);
     }
 
     private float updateDelay = 0.1f; // Delay in seconds
@@ -226,6 +241,7 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
             EEFManager.instance.GetAudio();
             haveKey = true;
             Destroy(other.gameObject);
+            HealthCanvas.GetComponentsInChildren<TextMeshProUGUI>()[1].text = null;
         }
 
         if (other.gameObject.tag == "Portions")
@@ -234,6 +250,20 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
             {
                 EEFManager.instance.GetAudio();
                 Speed += 2;
+                Destroy(other.gameObject);
+            }
+        }
+
+        if(other.gameObject.tag == "HealthPortions")
+        {
+            if (currentHealth < maxHealth)
+            {
+                EEFManager.instance.GetAudio();
+                currentHealth += 500f;
+                if (currentHealth > maxHealth)
+                {
+                    currentHealth = maxHealth;
+                }
                 Destroy(other.gameObject);
             }
         }
@@ -275,10 +305,15 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
         }
         else if (collision.gameObject.tag == "Enemies" && collision.gameObject.GetComponent<Animator>().GetBool("Attack"))
         {
+            currentHealth -= collision.gameObject.GetComponent<Enemy>().ATK;
+            if(currentHealth <= 0) currentHealth = 0;
             EEFManager.instance.GameOverAudio();
-            GameOverCanvas.gameObject.SetActive(true);
-            StartCoroutine(LoadSceneAfterDelay(4f, "StartScene"));
-            Speed = 0;
+            if(currentHealth <= 0)
+            {
+                GameOverCanvas.gameObject.SetActive(true);
+                StartCoroutine(LoadSceneAfterDelay(4f, "StartScene"));
+                Speed = 0;
+            }
         }
     }
 

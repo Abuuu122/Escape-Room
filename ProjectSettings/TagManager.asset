@@ -13,6 +13,7 @@ TagManager:
   - Penetrable
   - Wall
   - Portions
+  - HealthPortions
   layers:
   - Default
   - TransparentFX
