@@ -662,7 +662,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2370378732282637323}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -698,10 +698,14 @@ MonoBehaviour:
   anim: {fileID: 1436035132210470042}
   speed: 3
   health: 100
+  maxHealth: 100
   battle: 0
   player: {fileID: 0}
   isDead: 0
   slider: {fileID: 3595437489765992350}
+  damageSum: 0
+  initialScale: 0.8
+  scaleIncreaseRate: 0.005
 --- !u!1 &2452409939207722928
 GameObject:
   m_ObjectHideFlags: 0

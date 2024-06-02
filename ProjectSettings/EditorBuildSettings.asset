@@ -55,6 +55,9 @@ EditorBuildSettings:
     guid: 632fd725da9d2ba408bccb00f9a4147e
   - enabled: 1
     path: Assets/Scenes/Hard.unity
+    guid: 39149722fdb74e14586a175e4d2c9135
+  - enabled: 1
+    path: Assets/Scenes/Nightmare.unity
     guid: c511aee1e06c5ae48a22dc381decf2c7
   - enabled: 0
     path: Assets/StarterSamples/Usage/DistanceGrab.unity

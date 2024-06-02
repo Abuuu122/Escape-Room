@@ -10,10 +10,19 @@ public class Enemy : MonoBehaviour
     public Animator anim;
     public float speed = 1.5f;
     public float health = 100f;
+    public float maxHealth = 100f;
     public bool battle = false;
     public GameObject player;
     public bool isDead = false;
     public Slider slider;
+    public float damageSum = 0f;
+
+    public float initialScale = 0.8f;
+    public float scaleIncreaseRate = 0.005f;
+
+    private float threshold1 = 1.2f;
+    private float threshold2 = 8f;
+    private float threshold3 = 14f;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +32,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.Find("PlayerController");
     }
 
+    float timer = 0f;
     // Update is called once per frame
     void Update()
     {
@@ -35,7 +45,7 @@ public class Enemy : MonoBehaviour
 
         // Check if the distance is within a certain range
         
-        if(distanceToPlayer < 1f)
+        if(distanceToPlayer < threshold1)
         {
             //attack
             rb.velocity = Vector3.zero;
@@ -46,7 +56,7 @@ public class Enemy : MonoBehaviour
             }
             battle = true;
         }
-        else if (distanceToPlayer < 8f)
+        else if (distanceToPlayer < threshold2)
         {
             // chase the player
             transform.LookAt(player.transform);
@@ -59,7 +69,7 @@ public class Enemy : MonoBehaviour
             }
             battle = true;
         }
-        else if (distanceToPlayer < 14f)
+        else if (distanceToPlayer < threshold3)
         {
             rb.velocity = Vector3.zero;
             anim.SetBool("Chase", false);
@@ -81,7 +91,24 @@ public class Enemy : MonoBehaviour
             }
             battle = false;
         }
+        // Increase enemy size over time
+        float currentScale = initialScale + (timer * scaleIncreaseRate);
+        transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+        //collider size
+        col.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
 
+        //max health and health increase with size
+        maxHealth = 100f * currentScale;
+        health = maxHealth - damageSum;
+        //slider
+        slider.value = health / maxHealth;
+
+        //threshold increase with size
+        threshold1 = 1.2f * currentScale;
+        threshold2 = 8f * currentScale;
+        threshold3 = 14f * currentScale;
+
+        timer += Time.deltaTime;
     }
 
 
@@ -95,8 +122,11 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.tag == "Swords")
         {
-            health -= 30f;
-            slider.value = health / 100f;
+            //根据sword的攻击速度减少enemy的血量
+            float damage = other.gameObject.GetComponent<Rigidbody>().velocity.magnitude + 20f;
+            damageSum += damage;
+            health -= damage;
+            slider.value = health / maxHealth;
             //击退效果
             rb.velocity = Vector3.zero;
             rb.AddForce(-transform.forward * 500f);

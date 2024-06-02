@@ -35,7 +35,8 @@ public class StartMenu : MonoBehaviour
 
     void Start()
     {
-        DebugUIBuilder.instance.AddLabel("Maze VR");
+        DebugUIBuilder.instance.AddLabel("Maze Escape");
+        DebugUIBuilder.instance.AddLabel("You are stuck in a maze\nFind the key to escape\nMonsters grow with time, hurry up!");
 
         int n = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
         for (int i = 1; i < n; ++i)

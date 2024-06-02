@@ -57,4 +57,10 @@ public class EEFManager : MonoBehaviour
         audioSource.clip = audioClips[6];
         audioSource.Play();
     }
+
+    public void BornAudio()
+    {
+        audioSource.clip = audioClips[7];
+        audioSource.Play();
+    }
 }

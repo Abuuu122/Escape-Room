@@ -52,6 +52,7 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
     public Canvas NoKeyCanvas;
     public Canvas GameOverCanvas;
     public Canvas MenuCanvas;
+    public Canvas BeginCanvas;
 
     public GameObject spotlight;
 
@@ -69,6 +70,7 @@ public class SimpleCapsuleWithStickMovement : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(HideCanvasAfterDelay(4f, BeginCanvas));
     }
 
     private void FixedUpdate()
