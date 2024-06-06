@@ -67,3 +67,7 @@ Oculus Quest2 VR一体机
 ## 游戏截图
 
 ![prtsc](prtsc.jpg)
+
+## DEMO
+
+<video src="demo.mp4"></video>
