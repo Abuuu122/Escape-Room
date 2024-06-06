@@ -70,4 +70,4 @@ Oculus Quest2 VR一体机
 
 ## DEMO
 
-<video src="demo.mp4"></video>
+在根目录下的demo.mp4
